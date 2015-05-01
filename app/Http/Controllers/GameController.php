@@ -2,19 +2,31 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Auth;
+use App\Game;
 
 use Illuminate\Http\Request;
 
 class GameController extends Controller {
 
   /**
-   * Display a listing of the resource.
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
+
+  /**
+   * Display a list of all matches
    *
    * @return Response
    */
-  public function index()
-  {
-    //
+  public function index() {
+    $matches = Game::all();
+    return $matches->toArray();
   }
 
 
