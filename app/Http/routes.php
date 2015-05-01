@@ -15,6 +15,12 @@ Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
 
+// Resources
+
+Route::resource('game', 'GameController',
+  ['only' => ['store', 'show', 'index', 'update']]
+);
+
 Route::controllers([
   'auth' => 'Auth\AuthController',
   'password' => 'Auth\PasswordController',
