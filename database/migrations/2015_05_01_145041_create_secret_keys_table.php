@@ -15,7 +15,7 @@ class CreateSecretKeysTable extends Migration {
     Schema::table('games', function(Blueprint $table) {
       $table->dropColumn('secret_key');
     });
-    Schema::create('game_keys', function(lueprint $table) {
+    Schema::create('game_keys', function(Blueprint $table) {
       $table->string('secret')->primary();
       $table->integer('creator_id')->unsigned();
       $table->foreign('creator_id')->references('id')->on('users');
@@ -31,7 +31,7 @@ class CreateSecretKeysTable extends Migration {
   public function down()
   {
     Schema::table('games', function(Blueprint $table) {
-      $table->string('secret_key')->unique();
+      $table->string('secret_key')->nullable();
     });
     Schema::drop('game_keys');
   }

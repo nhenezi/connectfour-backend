@@ -18,9 +18,16 @@ class CreateUsersTable extends Migration {
       $table->string('name');
       $table->string('email')->unique();
       $table->string('password', 60);
-      $table->rememberToken();
       $table->timestamps();
     });
+
+    DB::table('users')->insert([
+      'name' => 'Anon',
+      'email' => 'annon@annon.com',
+      'password' => 'invalid pw',
+      'created_at' => date(DATE_ATOM),
+      'updated_at' => date(DATE_ATOM)
+    ]);
   }
 
   /**
