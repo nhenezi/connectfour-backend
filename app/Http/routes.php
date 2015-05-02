@@ -23,8 +23,5 @@ Route::resource('game', 'GameController',
 Route::resource('secret_key', 'SecretKeyController',
   ['only' => ['store', 'update']]
 );
-
-Route::controllers([
-  'auth' => 'Auth\AuthController',
-  'password' => 'Auth\PasswordController',
-]);
+Route::resource('auth', 'AuthController');
+Route::resource('user', 'UserController');
