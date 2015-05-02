@@ -15,8 +15,8 @@ class CreateSecretKeysTable extends Migration {
     Schema::table('games', function(Blueprint $table) {
       $table->dropColumn('secret_key');
     });
-    Schema::create('game_keys', function(Blueprint $table) {
-      $table->string('secret')->unique()->index();
+    Schema::create('game_keys', function(lueprint $table) {
+      $table->string('secret')->primary();
       $table->integer('creator_id')->unsigned();
       $table->foreign('creator_id')->references('id')->on('users');
       $table->timestamp('created_at');

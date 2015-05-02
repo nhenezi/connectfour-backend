@@ -20,6 +20,9 @@ Route::get('home', 'HomeController@index');
 Route::resource('game', 'GameController',
   ['only' => ['store', 'show', 'index', 'update']]
 );
+Route::resource('secret_key', 'SecretKeyController',
+  ['only' => ['store', 'update']]
+);
 
 Route::controllers([
   'auth' => 'Auth\AuthController',
