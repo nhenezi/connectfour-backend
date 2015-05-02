@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Auth;
+use \App\ErrorString;
 
 use Illuminate\Http\Request;
 
@@ -67,12 +68,14 @@ class SecretKeyController extends Controller {
    */
   public function update($id) {
     try {
-      $statusCode = 200;
-      $response = "{}";
       $user = Auth::user();
+      if ($user === null) {
+        $user = User::find(USER::ANNON_ID);
+      }
+
       $secretKey = \App\SecretKey::find($id);
       if ($secretKey === null) {
-        throw new \Exception('Invalid secret key');
+        throw new \Exception(ErrorString::INVALID_SECRET_KEY);
       }
 
       $game = new \App\Game();
