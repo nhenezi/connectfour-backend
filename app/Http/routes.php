@@ -23,5 +23,7 @@ Route::resource('game', 'GameController',
 Route::resource('secret_key', 'SecretKeyController',
   ['only' => ['store', 'update']]
 );
-Route::resource('auth', 'AuthController');
-Route::resource('user', 'UserController');
+Route::get('auth/{access_token}', 'AuthController@get');
+Route::post('auth', 'AuthController@post');
+
+Route::post('user', 'UserController@post');

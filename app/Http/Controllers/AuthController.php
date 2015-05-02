@@ -16,7 +16,7 @@ class AuthController extends Controller {
    *
    * @return Response
    */
-  public function index($access_token) {
+  public function get($access_token) {
     try {
       $auth = Auth::find($access_token);
 
@@ -39,7 +39,7 @@ class AuthController extends Controller {
    *
    * @return Response
    */
-  public function store() {
+  public function post() {
     try {
       $email = Request::input('email', null);
       $password = Request::input('password', null);

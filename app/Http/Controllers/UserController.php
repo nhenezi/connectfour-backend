@@ -12,11 +12,11 @@ use App\Auth;
 class UserController extends Controller {
 
   /**
-   * Store a newly created resource in storage.
+   * Creates new user and generates new access_token
    *
    * @return Response
    */
-  public function store() {
+  public function post() {
     try {
       $email = Request::input('email', null);
       $name = Request::input('name', null);
