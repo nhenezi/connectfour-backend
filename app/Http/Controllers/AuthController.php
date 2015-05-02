@@ -43,12 +43,11 @@ class AuthController extends Controller {
     try {
       $email = Request::input('email', null);
       $password = Request::input('password', null);
-      $data = [$email, $password];
       if ($email === null or $password === null) {
         throw new \Exception(ErrorString::INVALID_USERNAME_OR_PW);
       }
 
-      $user = User::find(['email' => $email]);
+      $user = User::where('email', $email)->firstOrFail();
       if ($user === null || !Hash::check($password, $user->password)) {
         throw new \Exception(ErrorString::INVALID_USERNAME_OR_PW);
       }
@@ -57,13 +56,12 @@ class AuthController extends Controller {
         $new_token = Auth::generateToken();
       } while (!!Auth::find($new_token));
 
-      $auth = Auth::find($new_token);
+      $auth = $user->auth;
       $auth->token = $new_token;
-      $auth->save;
+      $auth->save();
 
       $statusCode = 200;
       $response = $user->toArray();
-      $response['access_token'] = $auth->token;
     } catch (\Exception $e) {
       $statusCode = 500;
       $response = $e->getMessage();
