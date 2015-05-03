@@ -7,4 +7,7 @@ class ErrorString {
   const MISSING_EMAIL = 'Email is missing';
   const MISSING_NAME = 'Name is missing';
   const MISSING_PASSWORD = 'Password is missing';
+  const CANNOT_JOIN_OWN_GAME = 'Cannot join own game';
+  const INVALID_GAME_ID = 'Invalid game id';
+  const MISSING_COLUMN_MOVE = 'Missing column move';
 }

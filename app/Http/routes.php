@@ -20,10 +20,14 @@ Route::get('home', 'HomeController@index');
 Route::resource('game', 'GameController',
   ['only' => ['store', 'show', 'index', 'update']]
 );
-Route::resource('secret_key', 'SecretKeyController',
-  ['only' => ['store', 'update']]
-);
+
+Route::post('secret_key/{access_token}', 'SecretKeyController@post');
+Route::put('secret_key/{secret}/{access_token?}', 'SecretKeyController@put');
+
+
 Route::get('auth/{access_token}', 'AuthController@get');
 Route::post('auth', 'AuthController@post');
 
 Route::post('user', 'UserController@post');
+
+Route::post('move/{game_id}/{access_token?}', 'MoveController@post');

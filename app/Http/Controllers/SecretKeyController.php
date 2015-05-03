@@ -3,20 +3,26 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
-use Auth;
-use \App\ErrorString;
+use App\Auth;
+use App\ErrorString;
+use App\User;
 
 use Illuminate\Http\Request;
 
 class SecretKeyController extends Controller {
   /**
-   * Store a newly created secret key in storage.
+   * Creates new secret key
    *
    * @return Response
    */
-  public function store() {
+  public function post($access_token) {
     try {
-      $user = Auth::user();
+      $auth = Auth::find($access_token);
+      if ($auth === null) {
+        throw new \Exception(ErrorString::INVALID_ACCESS_TOKEN);
+      } else {
+        $user = $auth->user;
+      }
 
       do  {
         $secret = \App\SecretKey::generateSecret();
@@ -66,16 +72,21 @@ class SecretKeyController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function update($id) {
+  public function put($secret, $access_token = null) {
     try {
-      $user = Auth::user();
-      if ($user === null) {
+      $auth = Auth::find($access_token);
+      if ($auth === null) {
         $user = User::find(USER::ANNON_ID);
+      } else {
+        $user = $auth->user;
       }
 
-      $secretKey = \App\SecretKey::find($id);
+      $secretKey = \App\SecretKey::find($secret);
       if ($secretKey === null) {
         throw new \Exception(ErrorString::INVALID_SECRET_KEY);
+      }
+      if ($user->id === $secretKey->player_one) {
+        throw new \Exception(ErrorString::CANNOT_JOIN_OWN_GAME);
       }
 
       $game = new \App\Game();
