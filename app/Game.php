@@ -14,9 +14,13 @@ class Game extends Model {
   }
 
   public function getLastMove() {
-    $last_move = 0;
+    $last_move = new \stdClass();
+    $last_move->number = -1;
+    $last_move->toArray = function() {
+      return ['number' => -1];
+    };
     foreach ($this->moves as $move) {
-      if ($move->number > $last_move) {
+      if ($move->number > $last_move->number) {
         $last_move = $move;
       }
     }
@@ -53,7 +57,7 @@ class Game extends Model {
   public function getBoard() {
     $board = $this->initBoard();
     foreach ($this->moves as $move) {
-      $board[$move->y][$move->x] = $move->player_id;
+      $board[$move->x][$move->y] = $move->player_id;
     }
     return $board;
   }
@@ -62,8 +66,13 @@ class Game extends Model {
     if ($board == null) {
       $board = $this->getBoard();
     }
-    if ($last_move == null) {
+    if ($last_move === null) {
       $last_move = $this->getLastMove();
+    }
+
+    if ($last_move->number === -1) {
+      //this is a first move
+      return false;
     }
     $x = $last_move->x;
     $y = $last_move->y;

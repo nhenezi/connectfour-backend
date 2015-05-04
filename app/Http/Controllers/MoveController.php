@@ -24,6 +24,7 @@ class MoveController extends Controller {
       throw new \Exception(ErrorString::INVALID_GAME_ID);
     }
 
+    return response()->json($game->getLastMove()->toArray());
     if ($game->player_one !== $user->id && $game->player_two !== $user->id) {
       throw new \Exception(ErrorString::INVALID_GAME_ID);
     }
@@ -41,11 +42,15 @@ class MoveController extends Controller {
     $move->time = date(DATE_ATOM);
     $move->x = $column_move;
     $move->y = $moves_so_far_in_column;
-    $move->number = $last_move + 1;
+    $move->number = $last_move->number + 1;
     $move->save();
 
     $statusCode = 200;
     $response = $move->toArray();
+    $response['board'] = $game->getBoard();
+    $response['lm'] = $game->getLastMove()->toArray();
+    $response['winning'] = $game->wasLastMoveWinning();
+
     return response()->json($response, $statusCode);
   }
 }
