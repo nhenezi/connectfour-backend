@@ -19,6 +19,7 @@ class Game extends Model {
     $last_move->toArray = function() {
       return ['number' => -1];
     };
+    $this->load('moves');
     foreach ($this->moves as $move) {
       if ($move->number > $last_move->number) {
         $last_move = $move;
@@ -56,6 +57,7 @@ class Game extends Model {
 
   public function getBoard() {
     $board = $this->initBoard();
+    $this->load('moves');
     foreach ($this->moves as $move) {
       $board[$move->x][$move->y] = $move->player_id;
     }

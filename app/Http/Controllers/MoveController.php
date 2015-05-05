@@ -24,7 +24,6 @@ class MoveController extends Controller {
       throw new \Exception(ErrorString::INVALID_GAME_ID);
     }
 
-    return response()->json($game->getLastMove()->toArray());
     if ($game->player_one !== $user->id && $game->player_two !== $user->id) {
       throw new \Exception(ErrorString::INVALID_GAME_ID);
     }
