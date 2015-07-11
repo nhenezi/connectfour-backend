@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model {
-  const BOARD_HEIGHT = 7;
+  const BOARD_HEIGHT = 6;
   const BOARD_WIDTH = 7;
 
   protected $table = 'games';
@@ -85,7 +85,7 @@ class Game extends Model {
     for ($i = $sp; $i < self::BOARD_WIDTH && $i <= $x + 3; $i++) {
       if ($board[$i][$y] === $last_move->player_id) {
         $in_a_row++;
-      } else {
+     } else {
         $in_a_row = 0;
       }
 
@@ -112,7 +112,7 @@ class Game extends Model {
     $in_a_row = 0;
     // check if there is a diagonal (top left -> bottom right) 4 in a row
     for ($i = -3, $j = 3; $x + $i <= $x + 3, $y + $j >= $y - 3; $i++, $j--) {
-      if ($x + $i < 0 || $x + $i >= self::BOARD_WIDTH || $y + $j < 0 || $y + $j >= self::BOARD_WIDTH) {
+      if ($x + $i < 0 || $x + $i >= self::BOARD_WIDTH -1 || $y + $j < 0 || $y + $j >= self::BOARD_WIDTH -1) {
         continue;
       }
 
@@ -130,7 +130,9 @@ class Game extends Model {
     $in_a_row = 0;
     // check if there is a diagonal (bottom left -> top right) 4 in a row
     for ($i = -3, $j = -3; $x + $i <= $x + 3, $y + $j <= $y + 3; $i++, $j++) {
-      if ($x + $i < 0 || $x + $i >= self::BOARD_WIDTH || $y + $j < 0 || $y + $j >= self::BOARD_WIDTH) {
+      echo "\nChecking: ", $x + $i, ":", $y + $j;
+      echo "- ", $x + $i, "_", $y + $j;
+      if ($x + $i < 0 || $x + $i >= self::BOARD_WIDTH || $y + $j < 0 || $y + $j >= self::BOARD_HEIGHT) {
         continue;
       }
 

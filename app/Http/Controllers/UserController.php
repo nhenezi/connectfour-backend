@@ -40,7 +40,7 @@ class UserController extends Controller {
 
       $auth = new Auth();
       $auth->user_id = $user->id;
-      do  {
+      do {
         $new_token = Auth::generateToken();
       } while (!!Auth::find($new_token));
       $auth->token = $new_token;
