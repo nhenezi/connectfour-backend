@@ -197,8 +197,6 @@ class Game extends Model {
     $in_a_row = 0;
     // check if there is a diagonal (bottom left -> top right) 4 in a row
     for ($i = -3, $j = -3; $x + $i <= $x + 3, $y + $j <= $y + 3; $i++, $j++) {
-      echo "\nChecking: ", $x + $i, ":", $y + $j;
-      echo "- ", $x + $i, "_", $y + $j;
       if ($x + $i < 0 || $x + $i >= self::BOARD_WIDTH || $y + $j < 0 || $y + $j >= self::BOARD_HEIGHT) {
         continue;
       }
