@@ -6,6 +6,8 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+use App\Game;
+
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
   use Authenticatable, CanResetPassword;
@@ -36,4 +38,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     return $this->hasOne('App\Auth');
   }
 
+  public function games() {
+    $games = Game::where('player_one', $this->id)
+      ->orWhere('player_two', $this->id)->orderBy('id', 'desc')->get();
+
+    return $games;
+  }
 }

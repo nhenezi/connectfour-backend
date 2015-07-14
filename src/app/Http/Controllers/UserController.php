@@ -59,4 +59,56 @@ class UserController extends Controller {
     }
   }
 
+
+  /**
+   * Retrieves information for dashboard
+   */
+  public function stats($access_token) {
+    try {
+      $auth = Auth::find($access_token);
+
+      if ($auth === null) {
+        throw new \Exception(ErrorString::INVALID_ACCESS_TOKEN);
+      }
+
+      $user = $auth->user;
+      $games = $user->games();
+      $total_games = 0;
+      $won_games = 0;
+      $lost_games = 0;
+      $tied_games = 0;
+      $total_number_of_moves = 0;
+      $games_arr = [];
+      foreach ($games as $game) {
+        if ($game->winner === $user->id) {
+          $won_games++;
+        } elseif ($game->winner === 0) {
+          $tied_games++;
+        } else {
+          $lost_games++;
+        }
+
+        if ($game->player_one === $user->id) {
+          $game['partner'] = User::find($game->player_two);
+        } else {
+          $game['partner'] = User::find($game->player_one);
+        }
+
+        $game['number_of_moves'] = count($game->moves);
+        $total_number_of_moves += $game['number_of_moves'];
+        $games_arr[] = $game;
+      }
+      $statusCode = 200;
+      $response['games'] = array_slice($games_arr, 0, 5);
+      $response['won_games'] = $won_games;
+      $response['lost_games'] = $lost_games;
+      $response['tied_games'] = $tied_games;
+    } catch (\Exception $e) {
+      $statusCode = 200;
+      $response['error'] = $e->getMessage();
+      $response['success'] = false;
+    } finally {
+      return response()->json($response, $statusCode);
+    }
+  }
 }

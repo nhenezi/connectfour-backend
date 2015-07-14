@@ -24,6 +24,7 @@ Route::resource('game', 'GameController',
 Route::post('secret_key/{access_token}', 'SecretKeyController@post');
 Route::put('secret_key/{secret}/{access_token?}', 'SecretKeyController@put');
 
+Route::get('dashboard/{access_token}', 'UserController@stats');
 
 Route::get('auth/{access_token}', 'AuthController@get');
 Route::post('auth', 'AuthController@post');
