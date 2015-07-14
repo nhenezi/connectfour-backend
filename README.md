@@ -21,6 +21,22 @@ specific information.
 * set up nginx (use nginx.conf as a template)
 * restart nginx
 
+### Notification service
+
+Notification service subscribest to redis channels and acts as a proxy between
+backend and client-side (javacript) code. It allows us to send real-time data
+to client.
+
+#### Requirements
+
+* nodejs/npm
+* redis
+
+#### Setup
+
+* Install npm dependencies `npm install`
+* Run notification service `nodejs service.js`
+
 
 ## Arhitectural overview
 
