@@ -67,7 +67,7 @@ class Game extends Model {
       $game->end_time = date(DATE_ATOM);
       $game->save();
 
-      $first_to_play = rand(1, 2);
+      $first_to_play = rand(1, 2) === 1 ? $p1->id : $p2->id;
 
       $p1_data = [
         'game' => $game->toJson(),
