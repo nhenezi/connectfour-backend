@@ -67,14 +67,18 @@ class Game extends Model {
       $game->end_time = date(DATE_ATOM);
       $game->save();
 
+      $first_to_play = rand(1, 2);
+
       $p1_data = [
         'game' => $game->toJson(),
-        'partner' => $p2->toJson()
+        'partner' => $p2->toJson(),
+        'next_move' => $first_to_play
       ];
 
       $p2_data = [
         'game' => $game->toJson(),
-        'partner' => $p1->toJson()
+        'partner' => $p1->toJson(),
+        'next_move' => $first_to_play
       ];
 
       Redis::publish($pair[0].'|match found', json_encode($p1_data));
