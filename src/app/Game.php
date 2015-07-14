@@ -1,6 +1,8 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Redis;
+use App\Game;
 
 class Game extends Model {
   const BOARD_HEIGHT = 6;
@@ -27,6 +29,61 @@ class Game extends Model {
     }
 
     return $last_move;
+  }
+
+  /**
+   * Tries to find match for $user
+   */
+  public static function findMatch($user) {
+    $i = 0;
+    $players = [];
+    // aggregate all players in poll
+    do {
+      $players[] = Redis::lindex('users in poll', $i);
+      $i++;
+    } while (Redis::lindex('users in poll', $i));
+
+    if (count($players) < 2) {
+      return false;
+    }
+
+    $pairs = [];
+    // pair players
+    for ($i = 0; 2 * ($i + 1) <= count($players); $i++) {
+      $pairs[] = [$players[2 * $i], $players[2 * $i + 1]];
+      Redis::lrem('users in poll', 0, $players[2 * $i]);
+      Redis::lrem('users in poll', 0, $players[2 * $i + 1]);
+    }
+
+    // generate new game and notify players
+    foreach ($pairs as $pair) {
+      $p1 = Auth::find($pair[0])->user;
+      $p2 = Auth::find($pair[1])->user;
+
+      $game = new Game;
+      $game->player_one = $p1->id;
+      $game->player_two = $p2->id;
+      $game->start_time = date(DATE_ATOM);
+      $game->end_time = date(DATE_ATOM);
+      $game->save();
+
+      $p1_data = [
+        'game' => $game->toJson(),
+        'partner' => $p2->toJson()
+      ];
+
+      $p2_data = [
+        'game' => $game->toJson(),
+        'partner' => $p1->toJson()
+      ];
+
+      Redis::publish($pair[0].'|match found', json_encode($p1_data));
+      Redis::publish($pair[1].'|match found', json_encode($p2_data));
+    }
+  }
+
+  public static function searchingForMatch($user) {
+    return false;
   }
 
 

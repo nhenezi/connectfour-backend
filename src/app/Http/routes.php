@@ -31,3 +31,5 @@ Route::post('auth', 'AuthController@post');
 Route::post('user', 'UserController@post');
 
 Route::post('move/{game_id}/{access_token?}', 'MoveController@post');
+
+Route::post('match/{access_token}', 'MatchController@post');
