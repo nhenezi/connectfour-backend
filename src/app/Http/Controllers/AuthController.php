@@ -49,7 +49,7 @@ class AuthController extends Controller {
         throw new \Exception(ErrorString::INVALID_USERNAME_OR_PW);
       }
 
-      $user = User::where('email', $email)->firstOrFail();
+      $user = User::where('email', $email)->first();
       if ($user === null || !Hash::check($password, $user->password)) {
         throw new \Exception(ErrorString::INVALID_USERNAME_OR_PW);
       }
@@ -69,7 +69,7 @@ class AuthController extends Controller {
     } catch (\Exception $e) {
       $statusCode = 200;
       $response['error'] = $e->getMessage();
-      $response['succes'] = false;
+      $response['success'] = false;
     } finally {
       return response()->json($response, $statusCode);
     }
