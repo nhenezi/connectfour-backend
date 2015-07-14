@@ -44,9 +44,12 @@ class MoveController extends Controller {
     $move->number = $last_move->number + 1;
     $move->save();
 
+    $next_move = $game->player_one === $move->player_id ? $game->player_two : $game->player_one;
+
     $statusCode = 200;
     $response = $move->toArray();
     $response['board'] = $game->getBoard();
+    $response['next_move'] = $next_move;
     $response['lm'] = $game->getLastMove()->toArray();
     $response['winning'] = $game->wasLastMoveWinning();
 
