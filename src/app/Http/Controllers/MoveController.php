@@ -9,6 +9,7 @@ use App\User;
 use App\Game;
 use App\Move;
 use Request;
+use Redis;
 
 class MoveController extends Controller {
   public function post($game_id, $access_token = null) {
@@ -46,13 +47,21 @@ class MoveController extends Controller {
 
     $next_move = $game->player_one === $move->player_id ? $game->player_two : $game->player_one;
 
+    if ($game->wasLastMoveWinning()) {
+      $game->winner = $game->getLastMove()->player_id;
+      $game->save();
+    }
+
+
+    $partner = User::find($next_move);
     $statusCode = 200;
     $response = $move->toArray();
     $response['board'] = $game->getBoard();
     $response['next_move'] = $next_move;
     $response['lm'] = $game->getLastMove()->toArray();
     $response['winning'] = $game->wasLastMoveWinning();
-
+    $response['succes'] = true;
+    Redis::publish($partner->auth->token.'|move', json_encode($response));
     return response()->json($response, $statusCode);
   }
 }
