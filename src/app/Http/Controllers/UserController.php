@@ -80,6 +80,7 @@ class UserController extends Controller {
       $total_number_of_moves = 0;
       $games_arr = [];
       foreach ($games as $game) {
+        $total_games++;
         if ($game->winner === $user->id) {
           $won_games++;
         } elseif ($game->winner === 0) {
@@ -103,6 +104,7 @@ class UserController extends Controller {
       $response['won_games'] = $won_games;
       $response['lost_games'] = $lost_games;
       $response['tied_games'] = $tied_games;
+      $response['total_games'] = $total_games;
     } catch (\Exception $e) {
       $statusCode = 200;
       $response['error'] = $e->getMessage();

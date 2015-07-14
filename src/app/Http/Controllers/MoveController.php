@@ -53,9 +53,15 @@ class MoveController extends Controller {
     }
 
 
+
     $partner = User::find($next_move);
     $statusCode = 200;
     $response = $move->toArray();
+
+    if ($move->number >= Game::BOARD_WIDTH * Game::BOARD_HEIGHT - 1) {
+      $response['tie'] = true;
+    }
+
     $response['board'] = $game->getBoard();
     $response['next_move'] = $next_move;
     $response['lm'] = $game->getLastMove()->toArray();
