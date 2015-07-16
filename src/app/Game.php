@@ -86,11 +86,6 @@ class Game extends Model {
     }
   }
 
-  public static function searchingForMatch($user) {
-    return false;
-  }
-
-
   public function movesInColumn($column) {
     $moves = 0;
 

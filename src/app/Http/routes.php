@@ -34,3 +34,4 @@ Route::post('user', 'UserController@post');
 Route::post('move/{game_id}/{access_token?}', 'MoveController@post');
 
 Route::post('match/{access_token}', 'MatchController@post');
+Route::post('match/{access_token}/cancel', 'MatchController@cancelSearch');

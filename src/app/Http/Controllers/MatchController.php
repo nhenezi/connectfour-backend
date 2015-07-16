@@ -27,10 +27,6 @@ class MatchController extends Controller {
         throw new \Exception(ErrorString::INVALID_SECRET_KEY);
       }
 
-      if (Game::searchingForMatch($auth->user)) {
-        throw new \Exception(ErrorString::ALREADY_IN_POLL);
-      }
-
       Redis::rpush('users in poll', $auth->token);
       $match = Game::findMatch($auth->user);
       $response['match'] = $match;
@@ -47,4 +43,30 @@ class MatchController extends Controller {
     }
   }
 
+  /**
+   * Removes user from matching poll
+   *
+   * @return Response
+   */
+  public function cancelSearch($access_token) {
+    try {
+      $auth = Auth::find($access_token);
+
+      if ($auth === null) {
+        throw new \Exception(ErrorString::INVALID_SECRET_KEY);
+      }
+
+      Redis::lrem('users in poll', 0, $auth->token);
+
+      $statusCode = 200;
+      $response['success'] = true;
+    } catch (\Exception $e) {
+      $statusCode = 200;
+      $response['error'] = $e->getMessage();
+      $response['success'] = false;
+    } finally {
+      return response()->json($response, $statusCode);
+    }
+
+  }
 }
